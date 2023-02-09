@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
     int count = mergeSort(arr, 0, 50000 - 1);
     printf("%d \n", count);
 
+    fclose(fp);
     return 0;
 }
 
@@ -55,24 +56,7 @@ int mergeSort(int arr[], int low, int high) {
     return count;
 }
 
-// int mergeSort(int array[], int low, int high) {
-//     int mid, count = 0;
-
-//     if (low < high) {
-//         mid = (low + high) / 2;
-
-//         count = mergeSort(array, low, mid);
-//         count += mergeSort(array, mid + 1, high);
-//         count += merge(array, low, mid, high);
-//     }
-
-//     return count;
-// }
-
 int merge(int arr[], int low, int mid, int high) {
-    // int count = 0;
-    // int temp[high - low + 1];
-    // int i = low, j = mid + 1, k = 0;
     int i, j, k, count = 0;
 
     int temp[high - low + 1];
