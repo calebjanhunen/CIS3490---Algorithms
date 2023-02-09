@@ -11,8 +11,8 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
 
 int main(int argc, char **argv) {
     FILE *fp;
-    // char *filename = "testQ2.txt";
-    char *filename = "data_A2_Q2.txt";
+    char *filename = "testQ2.txt";
+    // char *filename = "data_A2_Q2.txt";
     int fsize;
     Point points[30000];
     char num[20];
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     }
 
     Point hull[20];
-    int numPoints = 30000, numHullPoints = 0;
+    int numPoints = 5, numHullPoints = 0;
     start = clock();
     convexHullBF(points, numPoints, hull, &numHullPoints);
     end = clock();
@@ -52,14 +52,39 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
     int leftSide, rightSide;
 
     for (int i = 0; i < numPoints; i++) {
-        printf("%d \n", i);
 
-        for (int j = i + 1; j < numPoints; j++) {
-            a = points[j].y - points[i].y;
-            b = points[i].x - points[j].x;
-            c = (points[i].x * points[j].y) - (points[i].y * points[j].x);
-            leftSide = 0;
-            rightSide = 0;
+        for (int j = 0; j < numPoints; j++) {
+            if (j != i) {
+                a = points[j].y - points[i].y;
+                b = points[i].x - points[j].x;
+                c = (points[i].x * points[j].y) - (points[i].y * points[j].x);
+                leftSide = 0;
+                rightSide = 0;
+                for (int k = 0; k < numPoints; k++) {
+                    if (k != j && k != i) {
+                        d = (a * points[k].x) + (b * points[k].y) - c;
+                        printf("LINE SEGMENT x1: %f y1: %f ...... x2L %f y2: %f............ POINT x: %f, y: %f \n", points[i].x, points[i].y, points[j].x, points[j].y, points[k].x, points[k].y);
+                        if (d > 0) {
+                            leftSide++;
+                        } else {
+                            rightSide++;
+                        }
+                    }
+                }
+
+                // printf("x: %f y: %f d: %f c: %f\n", points[k].x, points[k].y, d);
+
+                // printf("i: %d, j: %d, k: %d************************** \n", i, j, k);
+                printf("rs: %d, ls: %d \n", rightSide, leftSide);
+                if (rightSide == 0 || leftSide == 0) {
+                    // for (int k = 0; k <)
+
+                    hull[*numHullPoints] = points[i];
+                    hull[*numHullPoints + 1] = points[j];
+                    *numHullPoints += 2;
+                }
+            }
+
             // printf("LINE SEGMENT x1: %f y1: %f ...... x2L %f y2: %f\n", points[i].x, points[i].y, points[j].x, points[j].y);
             // printf("a: %f, b: %f, c: %f \n", a, b, c);
 
