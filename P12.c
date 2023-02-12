@@ -8,40 +8,36 @@ int merge(int arr[], int low, int mid, int high);
 int main(int argc, char **argv) {
     FILE *fp;
     char *filename = "data_A2_Q1.txt";
-    char *fileData;
-    int fsize, i = 0, arr[50000], num;
-    char c;
+    int i = 0, arr[50000], num;
     clock_t start, end;
 
+    /****************************Opening and reading file*************************************/
     if ((fp = fopen(filename, "r")) == NULL) {
         printf("Could not open\n");
         exit(-1);
     }
 
-    fseek(fp, 0, SEEK_END);
-    fsize = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-
-    // printf("%d \n", fsize);
-    fileData = malloc(fsize + 1);
-
     i = 0;
     while (fscanf(fp, "%d", &num) != EOF) {
         arr[i] = num;
-        // printf("%d \n", num);
-
-        // printf("%d: %d \n", i, arr[i]);
         i++;
     }
-    // int n = sizeof(arr) / sizeof(arr[0]);
-    // printf("%d \n", n);
+
+    /****************************Calling MergeSort*************************************/
+    start = clock();
     int count = mergeSort(arr, 0, 50000 - 1);
-    printf("%d \n", count);
+    end = clock();
+    double duration = ((double)end - start) / CLOCKS_PER_SEC;
+
+    printf("A divide and conquer program for counting inversions\n");
+    printf("Count = %d \n", count);
+    printf("Execution time = %0.0f ms\n ", duration * 1000);
 
     fclose(fp);
     return 0;
 }
 
+// Mergesort function: counts number of inversions in the array
 int mergeSort(int arr[], int low, int high) {
     int mid;
     int count = 0;
@@ -56,6 +52,7 @@ int mergeSort(int arr[], int low, int high) {
     return count;
 }
 
+// Merge function: merges 2 sorted arrays and counts inversions in the array
 int merge(int arr[], int low, int mid, int high) {
     int i, j, k, count = 0;
 

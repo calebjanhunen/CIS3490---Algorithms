@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -11,17 +12,19 @@ struct Point {
 } typedef Point;
 
 void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints);
+void shortestPath(Point *hull, Point *shortestPathArr, int *numPathPoints, int numHullPoints, Point startingPoint, Point endingPoint);
 
 int main(int argc, char **argv) {
     FILE *fp;
-    // char *filename = "testQ2.txt";
-    char *filename = "data_A2_Q2.txt";
+    char *filename = "testQ2.txt";
+    // char *filename = "data_A2_Q2.txt";
     int fsize;
     Point points[30000];
     char num[20];
     char c;
     clock_t start, end;
 
+    /****************************Opening and reading file*************************************/
     if ((fp = fopen(filename, "r")) == NULL) {
         printf("Could not open\n");
         exit(-1);
@@ -32,8 +35,9 @@ int main(int argc, char **argv) {
         i++;
     }
 
+    /****************************Finding Convex Hull*************************************/
     Point hull[30000];
-    int numPoints = 30000, numHullPoints = 0;
+    int numPoints = 5, numHullPoints = 0;
     start = clock();
     convexHullBF(points, numPoints, hull, &numHullPoints);
     end = clock();
@@ -44,6 +48,13 @@ int main(int argc, char **argv) {
     printf("Number of points: %d", numHullPoints);
     double duration = ((double)end - start) / CLOCKS_PER_SEC;
     printf("Execution time = %f \n", duration);
+
+    /****************************Finding shortest path given 2 points*************************************/
+    Point shortestPathArr[numHullPoints];
+    int numPathPoints = 0;
+    // Point s1 = {.x = 145.7, .y = 517.0}, s2 = {.x = 5961.6, .y = 6274.5};
+    Point s1 = {.x = -2.0, .y = 4.0}, s2 = {.x = 4.0, .y = -16.0};
+    shortestPath(hull, shortestPathArr, &numPathPoints, numHullPoints, s1, s2);
 
     // printf("%d \n", sizeof(hull) / sizeof(Point));
 
@@ -57,7 +68,7 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
     int isExtremePoint;
 
     for (int i = 0; i < numPoints; i++) {
-        printf("%d\n", i);
+        // printf("%d\n", i);
         for (int j = i + 1; j < numPoints; j++) {
             a = points[j].y - points[i].y;
             b = points[i].x - points[j].x;
@@ -72,8 +83,6 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
             isExtremePoint = TRUE;
             for (int k = 0; k < numPoints; k++) {
                 if (k != i && k != j) {
-                    // printf("%d %d %d\n", i, j, k);
-                    // printf("(%f, %f), (%f, %f), (%f, %f)\n", points[i].x, points[i].y, points[j].x, points[j].y, points[k].x, points[k].y)S
                     d = (a * points[k].x) + (b * points[k].y) - c;
                     if (d > 0) {
                         onLeft++;
@@ -87,9 +96,7 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
                     }
                 }
             }
-            // printf("onLeft: %d onRight: %d\n\n", onLeft, onRight);
             if (isExtremePoint == TRUE) {
-                // printf("(%f, %f), (%f, %f), (%f, %f)\n", points[i].x, points[i].y, points[j].x, points[j].y);
                 i_isUnique = TRUE;
                 j_isUnique = TRUE;
                 for (int k = 0; k < *numHullPoints; k++) {
@@ -101,8 +108,7 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
                         j_isUnique = FALSE;
                     }
                 }
-                // printf("junique: %d, iunique: %d \n", j_isUnique, i_isUnique);
-                // printf("hull: %d\n", *numHullPoints);
+
                 if (j_isUnique == TRUE && i_isUnique == TRUE) {
                     hull[*numHullPoints] = points[i];
                     hull[*numHullPoints + 1] = points[j];
@@ -114,40 +120,78 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
                     hull[*numHullPoints] = points[j];
                     *numHullPoints += 1;
                 }
-                // printf("hull after adding: %d\n", *numHullPoints);
             }
-            // if (isExtreme == TRUE) {
-
-            // }
         }
     }
 }
+float distance(Point p1, Point p2);
+Point findClosestPoint(Point point, Point *hull, int numHullPoints);
+Point closestIntersectionPoint(Point currPoint, Point closest, Point *hull, int numHullPoints);
 
-// void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints) {
-//     float crossProduct;
+void shortestPath(Point *hull, Point *shortestPathArr, int *numPathPoints, int numHullPoints, Point startingPoint, Point endingPoint) {
+    Point currentPoint = startingPoint;
+    Point closestPoint, nextPoint;
 
-//     for (int i = 0; i < numPoints; i++) {
-//         for (int j = i + 1; j < numPoints; j++) {
-//             for (int k = j + 1; k < numPoints; k++) {
-//                 printf("%d %d %d\n", i, j, k);
-//                 crossProduct = (points[j].x - points[i].x) * (points[k].y - points[i].y) - (points[k].x - points[i].x) * (points[j].y - points[i].y);
-//                 printf("%f \n", crossProduct);
-//                 printf("(%f, %f), (%f, %f), (%f, %f)\n\n", points[i].x, points[i].y, points[j].x, points[j].y, points[k].x, points[k].y);
-//                 if (crossProduct > 0) {
-//                     // printf("hull: %d \n", *numHullPoints);
-//                     hull[*numHullPoints] = points[j];
-//                     *numHullPoints += 1;
-//                     // break;
-//                 }
-//             }
-//         }
-//     }
-// }
+    while (currentPoint.x != endingPoint.x && currentPoint.y != endingPoint.y) {
+        printf("current Point(%f, %f) \n", currentPoint.x, currentPoint.y);
+        closestPoint = findClosestPoint(currentPoint, hull, numHullPoints);
+        printf("closest Point(%f, %f) \n", closestPoint.x, closestPoint.y);
+        Point nextPoint = closestIntersectionPoint(currentPoint, closestPoint, hull, numHullPoints);
+        shortestPathArr[*numPathPoints++] = nextPoint;
+        currentPoint = nextPoint;
+    }
+}
 
-/*
-23 -35.2
-45 5
-2 4
-2.4 64
--4.6 22
-*/
+Point findClosestPoint(Point point, Point *hull, int numHullPoints) {
+    // Point closestPoint = hull[0];
+    // float minDistance = distance(point, closestPoint), currDistance;
+    float minDistance = 1e9, currDistance;
+    Point closestPoint;
+
+    for (int i = 0; i < numHullPoints; i++) {
+        if (hull[i].x != point.x && hull[i].x != point.x) {
+            currDistance = distance(point, hull[i]);
+            printf("hull: (%f, %f) point:(%f, %f) distance: %f \n", hull[i].x, hull[i].y, point.x, point.y, currDistance);
+            if (currDistance < minDistance) {
+                minDistance = currDistance;
+                closestPoint = hull[i];
+            }
+        }
+    }
+
+    return closestPoint;
+}
+
+Point closestIntersectionPoint(Point currPoint, Point closestPoint, Point *hull, int numHullPoints) {
+    double slope = (closestPoint.y - currPoint.y) / (closestPoint.x - currPoint.x);
+    double yInt = currPoint.y - (slope * currPoint.x);
+    double slope2, yInt2;
+
+    Point closestIntPoint, intPoint;
+    double minDistance = 1e9;
+
+    for (int i = 0; i < numHullPoints; i++) {
+        printf("%d \n", i);
+        if (hull[i].x != closestPoint.x && hull[i].x != closestPoint.x) {
+            slope2 = (hull[i].y - closestPoint.y) / (hull[i].x - closestPoint.x);
+            yInt2 = hull[i].y - (slope * hull[i].x);
+
+            if (slope != slope2) {
+                intPoint.x = (yInt2 - yInt) / (slope - slope2);
+                intPoint.y = slope * intPoint.x + yInt;
+
+                double dist = distance(currPoint, intPoint);
+                if (dist < minDistance) {
+                    closestIntPoint = intPoint;
+                    minDistance = dist;
+                }
+            }
+        }
+    }
+
+    return closestIntPoint;
+}
+
+float distance(Point p1, Point p2) {
+    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
