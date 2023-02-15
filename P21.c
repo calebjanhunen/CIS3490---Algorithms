@@ -21,10 +21,7 @@ int main(int argc, char **argv) {
     FILE *fp;
     // char *filename = "testQ2.txt";
     char *filename = "data_A2_Q2.txt";
-    int fsize;
     Point points[30000];
-    char num[20];
-    char c;
     clock_t start, end;
 
     /****************************Opening and reading file*************************************/
@@ -52,22 +49,28 @@ int main(int argc, char **argv) {
     for (int i = 0; i < numHullPoints; i++) {
         printf("x: %.1lf, y: %.1lf \n", sortedHull[i].x, sortedHull[i].y);
     }
-    // printf("Number of points: %d\n", numHullPoints);
     double duration = ((double)end - start) / CLOCKS_PER_SEC;
-    printf("Time for computing hull: %f \n", duration);
+    printf("Time for computing hull: %.0f ms\n", duration * 1000);
 
     /****************************Finding shortest path given 2 points*************************************/
-    Point shortestPathArr[numHullPoints];
-    int numPathPoints = 0;
-    // Point s1 = {.x = 145.7, .y = 517.0}, s2 = {.x = 5961.6, .y = 6274.5};
-    Point s1 = {.x = 5616.9, .y = 37.6}, s2 = {.x = 5961.6, .y = 6274.5};
-    // Point s1 = {.x = -2.0, .y = 4.0}, s2 = {.x = 4.0, .y = -16.0};
+    Point s1, s2;
+    double x, y;
+    printf("Enter the x and y coordinates of s1: ");
+    scanf("%lf %lf", &x, &y);
+    s1.x = x;
+    s1.y = y;
+    printf("Enter the x and y coordinates of s2: ");
+    scanf("%lf %lf", &x, &y);
+    s2.x = x;
+    s2.y = y;
+
     findShortestPath(sortedHull, numHullPoints, s1, s2);
 
     fclose(fp);
     return 0;
 }
 
+// Finds the shortest path in the convex hull between 2 inputted points
 void findShortestPath(Point *sortedHull, int numHullPoints, Point s1, Point s2) {
     int startingIndex, endingIndex;
     Point path1[numHullPoints], path2[numHullPoints];
@@ -133,17 +136,18 @@ void findShortestPath(Point *sortedHull, int numHullPoints, Point s1, Point s2) 
     }
 }
 
+// Calculates distance between 2 points
 double distance(Point p1, Point p2) {
     return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
 }
 
+// brute force algorithm to find convex hull
 void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints) {
-    float a, b, c, d, compareVal;
+    float a, b, c, d;
     int onLeft, onRight;
     int isExtremePoint;
 
     for (int i = 0; i < numPoints; i++) {
-        printf("%d\n", i);
         for (int j = 0; j < numPoints; j++) {
             if (j != i) {
                 a = points[j].y - points[i].y;
@@ -151,11 +155,6 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
                 c = (points[i].x * points[j].y) - (points[i].y * points[j].x);
                 onRight = 0;
                 onLeft = 0;
-                if (i > 0) {
-                    compareVal = (a * points[0].x) + (b * points[0].y) - c;
-                } else {
-                    compareVal = (a * points[3].x) + (b * points[3].y) - c;
-                }
                 isExtremePoint = TRUE;
                 for (int k = 0; k < numPoints; k++) {
                     if (k != i && k != j) {
@@ -166,7 +165,7 @@ void convexHullBF(Point *points, int numPoints, Point *hull, int *numHullPoints)
                             onRight++;
                         }
 
-                        if (onLeft > 0 && onRight > 0 || d == 0) {
+                        if ((onLeft > 0 && onRight > 0) || d == 0) {
                             isExtremePoint = FALSE;
                             break;
                         }
@@ -207,6 +206,7 @@ void sortConvexHull(Point *hull, int numHullPoints, Point *sortedHull) {
     }
 }
 
+// sorting function for qsort
 int compareXVals(const void *a, const void *b) {
     Point p1 = *((Point *)a);
     Point p2 = *((Point *)b);

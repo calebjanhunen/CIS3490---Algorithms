@@ -4,11 +4,18 @@
 
 int main(int argc, char **argv) {
     FILE *fp;
-    char *filename = "data_A2_Q1.txt";
+    char filename[1000];
     int i = 0, arr[50000], num;
     clock_t start, end;
 
     /****************************Opening and reading file*************************************/
+    printf("Enter filename: ");
+    fgets(filename, 1000, stdin);
+    int fileIndex = 0;
+    while (filename[fileIndex] != '\n') {
+        fileIndex++;
+    }
+    filename[fileIndex] = '\0';
     if ((fp = fopen(filename, "r")) == NULL) {
         printf("Could not open\n");
         exit(-1);
