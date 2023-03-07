@@ -61,33 +61,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-// for (int i = 0; i < intervalSize; i++) {
-//         printf("%d \n", i);
-//         smallestInterval = intervals[i];
-//         count = 0;
-//         for (int j = 0; j < intervalSize; j++) {
-//             // if (j != i) {
-//             // printf("i: %d (%d, %d), j:%d (%d, %d), smallestInterval: (%d, %d) ..... ", i, intervals[i].min, intervals[i].max, j, intervals[j].min, intervals[j].max, smallestInterval.min, smallestInterval.max);
-
-//             if (intervals[j].min + 1 >= smallestInterval.max || intervals[j].max - 1 <= smallestInterval.min) {
-//                 // printf("\n");
-//                 continue;
-//             }
-//             count++;
-//             // printf("common point \n");
-//             if (intervals[j].min > smallestInterval.min) {
-//                 smallestInterval.min = intervals[j].min;
-//             }
-//             if (intervals[j].max < smallestInterval.max) {
-//                 smallestInterval.max = intervals[j].max;
-//             }
-//             // }
-//         }
-//         // printf("%d\n", count);
-//         // printf("\n");
-//         if (count > maxOverlapping) {
-//             maxOverlapping = count;
-//             pointIncluded = smallestInterval;
-//         }
-//     }
