@@ -18,7 +18,7 @@ int maxOverlappingIntervals(Endpoint *sortedEndpoints, int endpointSize);
 
 int main(int argc, char **argv) {
     char *filename = "data_A3_Q1_1.txt";
-    // char *filename = "testq1.txt";/
+    // char *filename = "testq1.txt";
     FILE *fp;
     int fileLine = 0;
     int intervalSize = 30000;
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 int maxOverlappingIntervals(Endpoint *sortedEndpoints, int endpointSize) {
     int currOverlapping = 1;
     int maxOverlapping = 1;
-    for (int i = 0; i < endpointSize; i++) {
+    for (int i = 1; i < endpointSize - ; i++) {
         if (sortedEndpoints[i].isLeft == 1) {
             currOverlapping++;
         } else {

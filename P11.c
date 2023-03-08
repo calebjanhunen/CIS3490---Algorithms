@@ -8,11 +8,11 @@ struct Interval {
 } typedef Interval;
 
 int main(int argc, char **argv) {
-    char *filename = "data_A3_Q1_1.txt";
-    // char *filename = "testq1.txt";
+    // char *filename = "data_A3_Q1_1.txt";
+    char *filename = "testq1.txt";
     FILE *fp;
     int fileLine = 0;
-    int intervalSize = 30000;
+    int intervalSize = 5;
     Interval intervals[intervalSize];
     clock_t start, end;
 
