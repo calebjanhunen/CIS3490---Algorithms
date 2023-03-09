@@ -30,15 +30,43 @@ int main(int argc, char **argv) {
     printf("A Horspool program for string search.\nEnter a pattern: ");
     scanf("%s", pattern);
     int patternLen = strlen(pattern);
-    int shiftCount = 0, count = 0;
 
     int stLen = 52;
     int ST[stLen];
+
+    start = clock();
     getShiftTable(ST, stLen, pattern, patternLen);
 
-    for (int i = 0; i < stLen; i++) {
-        printf("%d \n", ST[i]);
+    // Horspool algorithm
+    int count = 0, shiftCount = 0;
+    int fileIndex = patternLen - 1;
+    while (fileIndex < fsize) {
+        int patternIndex = 0;
+        while (patternIndex < patternLen && pattern[patternLen - 1 - patternIndex] == fileText[fileIndex - patternIndex]) {
+            patternIndex++;
+        }
+        if (patternIndex == patternLen) {
+            count++;
+        }
+        if (65 <= fileText[fileIndex] && fileText[fileIndex] <= 90) {
+            fileIndex += ST[fileText[fileIndex] - 'A'];
+        } else if (97 <= fileText[fileIndex] && fileText[fileIndex] <= 122) {
+            fileIndex += ST[fileText[fileIndex] - 'a' + 26];
+        } else {
+            fileIndex += patternLen;
+        }
+        shiftCount++;
     }
+    end = clock();
+
+    double duration = ((double)end - start) / CLOCKS_PER_SEC;
+    printf("Count: %d\n", count);
+    printf("Shifts: %d\n", shiftCount);
+    printf("Execution time = %0.0f ms\n", duration * 1000);
+
+    // for (int i = 0; i < stLen; i++) {
+    //     printf("%d \n", ST[i]);
+    // }
 
     return 0;
 }
