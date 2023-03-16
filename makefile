@@ -1,6 +1,8 @@
 CC = gcc
 CFLAGS =  -Wall -std=c99 -pedantic 
 
+all: P11 P12 P21 P22 P23
+
 P11: P11.c
 	$(CC) $(CFLAGS) -o P11 P11.c
 
