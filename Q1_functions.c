@@ -101,13 +101,17 @@ tree_node *create_optimal_bst(double **avgNumCmp_table, int **root_table, int st
     return node;
 }
 
-void search_for_key(char *key, tree_node *node) {
+void search_for_key(char *key, tree_node *node, int part) {
     if (node == NULL) {
         printf("Not found\n");
         return;
     }
 
-    printf("Compared with %s (%0.3f), ", node->word->word, node->word->avgNumCmp);
+    if (part == 1) {
+        printf("Compared with %s (%0.3f), ", node->word->word, node->word->avgNumCmp);
+    } else if (part == 2) {
+        printf("Compared with %s (%f), ", node->word->word, node->word->prob);
+    }
 
     int strCmp_result = strcmp(key, node->word->word);
     if (strCmp_result == 0) {
@@ -115,10 +119,10 @@ void search_for_key(char *key, tree_node *node) {
         return;
     } else if (strCmp_result < 0) {
         printf("go left subtree.\n");
-        search_for_key(key, node->left_child);
+        search_for_key(key, node->left_child, part);
     } else {
         printf("go right subtree.\n");
-        search_for_key(key, node->right_child);
+        search_for_key(key, node->right_child, part);
     }
 }
 

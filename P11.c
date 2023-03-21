@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     scanf("%s", key);
 
     // search for the key in the bst
-    search_for_key(key, root);
+    search_for_key(key, root, 1);
 
     // Free all malloced memory
     free_tables(avgNumCmp_table, root_table, HTwords);

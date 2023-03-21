@@ -29,7 +29,7 @@ HTwords_item *create_word_item(char *word);
 HTwords *create_word_HT();
 tree_node *create_node(HTwords_item *word);
 tree_node *create_optimal_bst(double **avgNumCmp_table, int **root_table, int start_index, int end_index, HTwords *words);
-void search_for_key(char *key, tree_node *node);
+void search_for_key(char *key, tree_node *node, int part);
 int find_index(HTwords *HTwords, char *word);
 int wordCmp(const void *a, const void *b);
 void free_tables(double **avgNumCmp_table, int **root_table, HTwords *words);
