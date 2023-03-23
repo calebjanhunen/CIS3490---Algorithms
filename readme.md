@@ -5,7 +5,7 @@
 **Assignment Number:** 4
 
 
-#Compilation Instructions:
+# Compilation Instructions:
 
 P11: make P11
 
@@ -14,7 +14,7 @@ P12: make P12
 P2: make P2
 
 
-#Running instructions:
+# Running instructions:
 
 P11: ./P11
 
