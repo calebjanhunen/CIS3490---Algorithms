@@ -36,3 +36,10 @@ void free_tables(double **avgNumCmp_table, int **root_table, HTwords *words);
 void free_HT(HTwords *words);
 void free_item(HTwords_item *words);
 void free_bst(tree_node *node);
+
+// ************************ P12 ***********************************
+FILE *open_file(char *filename);
+int **malloc_2d_array(int size);
+void initialize_2d_array(int **arr, int size, FILE *fp);
+int whichManPrefered(int man1, int man2, int **girls, int girl, int size);
+void free_2d_array(int **arr, int size);
