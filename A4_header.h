@@ -1,3 +1,10 @@
+/*
+Name: Caleb Janhunen
+ID: 1090270
+Date: March 23, 2023
+Assignment Number: 4
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +36,7 @@ HTwords_item *create_word_item(char *word);
 HTwords *create_word_HT();
 tree_node *create_node(HTwords_item *word);
 tree_node *create_optimal_bst(double **avgNumCmp_table, int **root_table, int start_index, int end_index, HTwords *words);
+tree_node *create_greedy_bst(HTwords *HTwords, int start_index, int end_index);
 void search_for_key(char *key, tree_node *node, int part);
 int find_index(HTwords *HTwords, char *word);
 int wordCmp(const void *a, const void *b);
@@ -41,5 +49,5 @@ void free_bst(tree_node *node);
 FILE *open_file(char *filename);
 int **malloc_2d_array(int size);
 void initialize_2d_array(int **arr, int size, FILE *fp);
-int whichManPrefered(int man1, int man2, int **girls, int girl, int size);
+int whichBoyPrefered(int man1, int man2, int **girls, int girl, int size);
 void free_2d_array(int **arr, int size);

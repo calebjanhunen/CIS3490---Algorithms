@@ -1,3 +1,10 @@
+/*
+Name: Caleb Janhunen
+ID: 1090270
+Date: March 23, 2023
+Assignment Number: 4
+*/
+
 #include "A4_header.h"
 
 // Function to open and read file and create word hash table
@@ -101,6 +108,33 @@ tree_node *create_optimal_bst(double **avgNumCmp_table, int **root_table, int st
     return node;
 }
 
+// Create the BST for greedy approach
+tree_node *create_greedy_bst(HTwords *HTwords, int start_index, int end_index) {
+    if (start_index > end_index || start_index == HTwords->count) {
+        return NULL;
+    }
+
+    HTwords_item *largestProbWord = HTwords->words[start_index];
+    int wordIndex = start_index;
+    for (int i = start_index; i <= end_index; i++) {
+        if (HTwords->words[i]->prob > largestProbWord->prob) {
+            largestProbWord = HTwords->words[i];
+            wordIndex = i;
+        }
+    }
+
+    tree_node *node = create_node(largestProbWord);
+
+    if (start_index == end_index) {
+        return node;
+    }
+
+    node->left_child = create_greedy_bst(HTwords, start_index, wordIndex - 1);
+    node->right_child = create_greedy_bst(HTwords, wordIndex + 1, end_index);
+
+    return node;
+}
+
 void search_for_key(char *key, tree_node *node, int part) {
     if (node == NULL) {
         printf("Not found\n");
@@ -110,7 +144,7 @@ void search_for_key(char *key, tree_node *node, int part) {
     if (part == 1) {
         printf("Compared with %s (%0.3f), ", node->word->word, node->word->avgNumCmp);
     } else if (part == 2) {
-        printf("Compared with %s (%f), ", node->word->word, node->word->prob);
+        printf("Compared with %s (%0.3f), ", node->word->word, node->word->prob);
     }
 
     int strCmp_result = strcmp(key, node->word->word);

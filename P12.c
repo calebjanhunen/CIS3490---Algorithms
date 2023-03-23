@@ -1,6 +1,11 @@
-#include "A4_header.h"
-tree_node *create_greedy_bst(HTwords *HTwords, int start_index, int end_index);
+/*
+Name: Caleb Janhunen
+ID: 1090270
+Date: March 23, 2023
+Assignment Number: 4
+*/
 
+#include "A4_header.h"
 int main(int argc, char **argv) {
     char *filename = "data_A3_Q1.txt";
     // char *filename = "testfile.txt";
@@ -28,31 +33,4 @@ int main(int argc, char **argv) {
 
     free_HT(HTwords);
     free_bst(root);
-}
-
-tree_node *create_greedy_bst(HTwords *HTwords, int start_index, int end_index) {
-    // printf("\n");
-    if (start_index > end_index || start_index == HTwords->count) {
-        return NULL;
-    }
-
-    HTwords_item *largestProbWord = HTwords->words[start_index];
-    int wordIndex = start_index;
-    for (int i = start_index; i <= end_index; i++) {
-        if (HTwords->words[i]->prob > largestProbWord->prob) {
-            largestProbWord = HTwords->words[i];
-            wordIndex = i;
-        }
-    }
-
-    tree_node *node = create_node(largestProbWord);
-
-    if (start_index == end_index) {
-        return node;
-    }
-
-    node->left_child = create_greedy_bst(HTwords, start_index, wordIndex - 1);
-    node->right_child = create_greedy_bst(HTwords, wordIndex + 1, end_index);
-
-    return node;
 }

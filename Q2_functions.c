@@ -1,3 +1,10 @@
+/*
+Name: Caleb Janhunen
+ID: 1090270
+Date: March 23, 2023
+Assignment Number: 4
+*/
+
 #include "A4_header.h"
 
 // Function to open file
@@ -32,7 +39,7 @@ void initialize_2d_array(int **arr, int size, FILE *fp) {
     }
 }
 
-int whichManPrefered(int man1, int man2, int **girls, int girl, int size) {
+int whichBoyPrefered(int man1, int man2, int **girls, int girl, int size) {
     for (int i = 0; i < size; i++) {
         if (girls[girl][i] == man1) {
             return man1;
