@@ -8,6 +8,7 @@ Assignment Number: 5
 // Libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 // Structs
 struct Set {
@@ -15,7 +16,14 @@ struct Set {
     int length;
 } typedef Set;
 
+struct Stats {
+    int numSubsets;
+    int numSumSubsets;
+} typedef Stats;
+
 // Functions
 FILE *open_file(char *filename);
-Set *init_set(FILE *fp);
+Set *malloc_set(FILE *fp);
+void populate_set(Set *set, FILE *fp);
+void find_sum_of_subset(Set *initialSet, int *subset, int index, int inputVal, Stats *stats);
 void free_set(Set *set);
