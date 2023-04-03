@@ -19,6 +19,7 @@ struct Set {
 struct Stats {
     int numSubsets;
     int numSumSubsets;
+    int numDeadEnds;
 } typedef Stats;
 
 // Functions
@@ -26,4 +27,5 @@ FILE *open_file(char *filename);
 Set *malloc_set(FILE *fp);
 void populate_set(Set *set, FILE *fp);
 void find_sum_of_subset(Set *initialSet, int *subset, int index, int inputVal, Stats *stats);
+int compareNums(const void *a, const void *b);
 void free_set(Set *set);

@@ -108,6 +108,35 @@ void find_sum_of_subset(Set *initialSet, int *subset, int index, int inputVal, S
     find_sum_of_subset(initialSet, subset, index + 1, inputVal, stats);
 }
 
+void backtracking_subset_sum(Set *set, int currSum, int targetSum, int index, Stats *stats) {
+    if (currSum > targetSum) {
+        stats->deadEndNum++;
+        return;
+    }
+}
+
+/**
+ * Function: compareNums
+ * -----------------------------------
+ * compare function for qsort function
+ *
+ * @param a: first value to be compared
+ * @param b: second value to be compared
+ * @return int: 1 -> if greater, -1 -> if less, 0 -> if even
+ */
+int compareNums(const void *a, const void *b) {
+    int num1 = *((int *)a);
+    int num2 = *((int *)b);
+
+    if (num1 > num2) {
+        return 1;
+    } else if (num1 < num2) {
+        return -1;
+    } else {
+        return -1;
+    }
+}
+
 /**
  * Function: free_set
  * -----------------------------------

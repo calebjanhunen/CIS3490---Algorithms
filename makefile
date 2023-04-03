@@ -17,5 +17,12 @@ P11: P11.o P1_functions.o
 P11.o: P11.c A5.h
 	$(CC) $(CFLAGS) -c P11.c -o P11.o
 
+# P12
+P12: P12.o P1_functions.o 
+	$(CC) $(CFLAGS) P12.o P1_functions.o -o P12 
+
+P12.o: P12.c A5.h
+	$(CC) $(CFLAGS) -c P12.c -o P12.o
+
 clean:
-	rm *.o P11
+	rm *.o P11 P12
