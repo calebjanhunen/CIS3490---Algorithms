@@ -10,6 +10,9 @@ CFLAGS =  -Wall -std=c99 -pedantic -g
 P1_functions.o: P1_functions.c A5.h
 	$(CC) $(CFLAGS) -c P1_functions.c -o P1_functions.o
 
+P2_functions.o: P2_functions.c A5.h
+	$(CC) $(CFLAGS) -c P2_functions.c -o P2_functions.o
+
 # P11
 P11: P11.o P1_functions.o 
 	$(CC) $(CFLAGS) P11.o P1_functions.o -o P11 
@@ -24,5 +27,12 @@ P12: P12.o P1_functions.o
 P12.o: P12.c A5.h
 	$(CC) $(CFLAGS) -c P12.c -o P12.o
 
+# P21
+P21: P21.o P2_functions.o 
+	$(CC) $(CFLAGS) P21.o P2_functions.o -o P21 
+
+P21.o: P21.c A5.h
+	$(CC) $(CFLAGS) -c P21.c -o P21.o
+
 clean:
-	rm *.o P11 P12
+	rm *.o P11 P12 P21

@@ -46,6 +46,7 @@ Set *malloc_set(FILE *fp) {
     set = malloc(sizeof(Set));
     set->nums = malloc(fsize * sizeof(int));
     set->length = 0;
+    set->totalSum = 0;
 
     return set;
 }
@@ -62,6 +63,7 @@ void populate_set(Set *set, FILE *fp) {
 
     int i = 0;
     while (fscanf(fp, "%d", &(set->nums[i])) == 1) {
+        set->totalSum += set->nums[i];
         i++;
     }
     set->length = i;
@@ -108,11 +110,34 @@ void find_sum_of_subset(Set *initialSet, int *subset, int index, int inputVal, S
     find_sum_of_subset(initialSet, subset, index + 1, inputVal, stats);
 }
 
-void backtracking_subset_sum(Set *set, int currSum, int targetSum, int index, Stats *stats) {
-    if (currSum > targetSum) {
-        stats->deadEndNum++;
+/**
+ * Function: backtracking_subset_sum
+ * -----------------------------------
+ * Recursively traverses down a tree adding the current set->nums to the sum for one side and not adding it for the other side
+ *
+ * @param initialSet: the initial Set struct that was read in by the file
+ * @param setIndex: the index value of set->nums
+ * @param targetSum: the target sum inputted by the user
+ * @param stats: Stat struct that contains number of subset sums and the number of deadends
+ */
+void backtracking_subset_sum(Set *set, int setIndex, int currSum, int targetSum, Stats *stats) {
+    // If currrent sum = target sum -> sum found
+    if (currSum == targetSum) {
+        stats->numSumSubsets++;
         return;
     }
+
+    // If current sum is greater than target sum or we've reached the end of the array -> dead end found
+    if (currSum > targetSum || setIndex == set->length) {
+        stats->numDeadEnds++;
+        return;
+    }
+
+    // Call the function adding the current index's number to the sum (going right down the tree)
+    backtracking_subset_sum(set, setIndex + 1, currSum + set->nums[setIndex], targetSum, stats);
+
+    // Call the function without adding the current index's number to the sum (going left down the tree)
+    backtracking_subset_sum(set, setIndex + 1, currSum, targetSum, stats);
 }
 
 /**
