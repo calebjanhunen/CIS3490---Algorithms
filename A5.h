@@ -35,8 +35,8 @@ void free_set(Set *set);
 
 /***********************************************P2**********************************************/
 // Constants
-#define MATRIX_HEIGHT 12
-#define MATRIX_WIDTH 12
+#define MATRIX_HEIGHT 3
+#define MATRIX_WIDTH 3
 
 // Structs
 struct Assignment {
@@ -44,5 +44,15 @@ struct Assignment {
     int job;
 } typedef Assignment;
 
+struct P2_stats {
+    int numPerms;
+    Assignment *idealAssignment;
+    int totalVal;
+} typedef P2_stats;
+
 void populate_matrix(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], FILE *fp);
-void create_all_permutations(int n, int personIndex, int *numPerms, int *availableJobs, Assignment *assignment);
+P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH]);
+// void create_all_permutations(int n, int personIndex, int *numPerms, int *availableJobs, Assignment *assignment, int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int *maxVal);
+void create_all_permutations(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, int personIndex, int *availableJobs, Assignment *currAssignment, P2_stats *stats);
+void check_current_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, Assignment *currAssignment, P2_stats *stats);
+void free_P2_stats(P2_stats *stats);

@@ -8,8 +8,8 @@ Assignment Number: 5
 #include "A5.h"
 
 int main(int argc, char **argv) {
-    char *filename = "data_A5_Q2_1.txt";
-    // char *filename = "testq2.txt";
+    // char *filename = "data_A5_Q2_1.txt";
+    char *filename = "testq2.txt";
     FILE *fp;
     int matrix[MATRIX_HEIGHT][MATRIX_WIDTH];
 
@@ -23,17 +23,20 @@ int main(int argc, char **argv) {
         printf("\n");
     }
 
-    Assignment *assignment = malloc(MATRIX_HEIGHT * sizeof(Assignment));
-    int availableJobs[MATRIX_HEIGHT];
-    int numPerms = 0;
+    P2_stats *stats = find_ideal_assignment(matrix);
+
+    printf("Number of permutations: %d\n", stats->numPerms);
     for (int i = 0; i < MATRIX_HEIGHT; i++) {
-        availableJobs[i] = i;
+        printf("%d: %d, ", stats->idealAssignment[i].person, stats->idealAssignment[i].job);
+        // for (int j = 0; j < MATRIX_HEIGHT; j++) {
+        //     if (stats->idealAssignment[j].job == i) {
+        //         printf("%d ", stats->idealAssignment[j].person);
+        //     }
+        // }
     }
+    printf("\n");
+    printf("The total value: %d", stats->totalVal);
 
-    create_all_permutations(MATRIX_HEIGHT, 0, &numPerms, availableJobs, assignment);
-
-    printf("Number of permutations: %d\n", numPerms);
-
-    free(assignment);
+    // free_P2_stats(stats);
     return 0;
 }
