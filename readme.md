@@ -20,8 +20,8 @@ P22: make P22
 
 P11: ./P11 (takes around 5000 ms)
 
-P12: ./P12 (takes around 100ms)
+P12: ./P12 (takes around 200ms)
 
-P21: ./P21 (takes around 40000 ms)
+P21: ./P21 (takes around 70000 ms)
 
 P22: ./P22 (takes around 1 ms)
