@@ -34,5 +34,12 @@ P21: P21.o P2_functions.o
 P21.o: P21.c A5.h
 	$(CC) $(CFLAGS) -c P21.c -o P21.o
 
+# P22
+P22: P22.o P2_functions.o 
+	$(CC) $(CFLAGS) P22.o P2_functions.o -o P22 
+
+P22.o: P22.c A5.h
+	$(CC) $(CFLAGS) -c P22.c -o P22.o
+
 clean:
-	rm *.o P11 P12 P21
+	rm *.o P11 P12 P21 P22

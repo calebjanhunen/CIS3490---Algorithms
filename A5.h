@@ -35,8 +35,8 @@ void free_set(Set *set);
 
 /***********************************************P2**********************************************/
 // Constants
-#define MATRIX_HEIGHT 3
-#define MATRIX_WIDTH 3
+#define MATRIX_HEIGHT 12
+#define MATRIX_WIDTH 12
 
 // Structs
 struct Assignment {
@@ -51,8 +51,11 @@ struct P2_stats {
 } typedef P2_stats;
 
 void populate_matrix(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], FILE *fp);
-P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH]);
-// void create_all_permutations(int n, int personIndex, int *numPerms, int *availableJobs, Assignment *assignment, int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int *maxVal);
+P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int question);
 void create_all_permutations(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, int personIndex, int *availableJobs, Assignment *currAssignment, P2_stats *stats);
 void check_current_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, Assignment *currAssignment, P2_stats *stats);
 void free_P2_stats(P2_stats *stats);
+
+void branch_and_bound(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int personIndex, int *availableJobs, P2_stats *stats);
+int max_upper_bound(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], Assignment *assignment);
+int find_max_value_job(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int personIndex, int *availableJobs, Assignment *assignment);

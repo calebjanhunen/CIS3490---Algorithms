@@ -50,10 +50,11 @@ void populate_matrix(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], FILE *fp) {
  * wrapper class for create_all_permutations
  *
  * @param matrix: 2d array read in from file
+ * @param question: 1 -> P21, 2 -> P22
  *
  * @return stats: A stats struct containing the ideal assignment, total value of ideal assignment and total number of permutations
  */
-P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH]) {
+P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int question) {
     P2_stats *stats = malloc(sizeof(P2_stats));
     stats->numPerms = 0;
     stats->totalVal = 0;
@@ -65,12 +66,36 @@ P2_stats *find_ideal_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH]) {
         availableJobs[i] = i;
     }
 
-    // Malloc assignment array for current assignment
-    Assignment *assignment = malloc(MATRIX_WIDTH * sizeof(Assignment));
+    if (question == 1) {
 
-    create_all_permutations(matrix, MATRIX_HEIGHT, 0, availableJobs, assignment, stats);
+        // Malloc assignment array for current assignment
+        Assignment *assignment = malloc(MATRIX_WIDTH * sizeof(Assignment));
 
-    free(assignment);
+        create_all_permutations(matrix, MATRIX_HEIGHT, 0, availableJobs, assignment, stats);
+
+        free(assignment);
+    } else if (question == 2) {
+        int max_j;
+        for (int i = 0; i < MATRIX_HEIGHT; i++) {
+            max_j = 0;
+            int currentMaxVal = matrix[i][0];
+            for (int j = 0; j < MATRIX_WIDTH; j++) {
+                if (matrix[i][j] > currentMaxVal) {
+                    currentMaxVal = matrix[i][j];
+                    max_j = j;
+                }
+            }
+            stats->idealAssignment[i].person = i;
+            stats->idealAssignment[i].job = max_j;
+        }
+
+        // for (int i = 0; i < 12; i++) {
+        //     printf("{%d: %d}, ", stats->idealAssignment[i].person, stats->idealAssignment[i].job);
+        // }
+        // printf("\n");
+
+        branch_and_bound(matrix, 0, availableJobs, stats);
+    }
     return stats;
 }
 
@@ -120,12 +145,9 @@ void check_current_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, As
     int currVal = 0;
 
     // Add up values from matrix for each person-job assignment in the current assignment array
-    printf("CUrrent assignment: ");
     for (int i = 0; i < n; i++) {
         currVal += matrix[currAssignment[i].person][currAssignment[i].job];
-        printf("%d: %d, ", currAssignment[i].person, currAssignment[i].job);
     }
-    printf("\n");
 
     // If current assignment produces a larger value -> set current assignment to the ideal assignment
     if (currVal > stats->totalVal) {
@@ -135,6 +157,87 @@ void check_current_assignment(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int n, As
         }
         stats->totalVal = currVal;
     }
+}
+
+void branch_and_bound(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int personIndex, int *availableJobs, P2_stats *stats) {
+    if (personIndex == MATRIX_HEIGHT) {
+        stats->totalVal = max_upper_bound(matrix, stats->idealAssignment);
+        return;
+    }
+
+    int largestValJob = find_max_value_job(matrix, personIndex, availableJobs, stats->idealAssignment);
+    availableJobs[largestValJob] = -1;
+    stats->idealAssignment[personIndex].job = largestValJob;
+
+    branch_and_bound(matrix, personIndex + 1, availableJobs, stats);
+}
+
+/**
+ * Function: find_max_value_job
+ * -----------------------------------
+ * Finds the job in the matrix_row array that hasn't been assigned yet that produces the largest max upper bound
+ *
+ * @param matrix_row: the row of the matrix that is being considered
+ * @param availableJobs: array containing the available jobs
+ *
+ * @return the index of the matrix_row with the largest value
+ */
+int find_max_value_job(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], int personIndex, int *availableJobs, Assignment *assignment) {
+    int maxValJob = 0;
+    int maxUpperBound = 0, currentUpperBound;
+
+    Assignment tempAssignment[MATRIX_HEIGHT];
+    for (int i = 0; i < MATRIX_HEIGHT; i++) {
+        tempAssignment[i].person = assignment[i].person;
+        tempAssignment[i].job = assignment[i].job;
+    }
+
+    for (int i = 0; i < MATRIX_WIDTH; i++) {
+        tempAssignment[personIndex].job = i;
+        currentUpperBound = max_upper_bound(matrix, tempAssignment);
+        // printf("{%d: %d}: %d\n", personIndex, i, currentUpperBound);
+        if (currentUpperBound > maxUpperBound && availableJobs[i] != -1) {
+            assignment[personIndex].job = i;
+            maxUpperBound = currentUpperBound;
+            maxValJob = i;
+        }
+    }
+    // printf("In find_max_value_job: ");
+    // for (int i = 0; i < 12; i++) {
+    //     printf("{%d: %d}, ", assignment[i].person, assignment[i].job);
+    // }
+    // printf("\n");
+
+    printf("Max upper bound: %d \n", maxUpperBound);
+
+    return maxValJob;
+}
+
+/**
+ * Function: find_max_upper_bound
+ * -----------------------------------
+ * Finds the maximum value from all assignments so far
+ *
+ * @param matrix: 2d array read in from file
+ * @param assignment: the assignment from the P2_stats struct
+ *
+ * @return maxUpperBound: the maximum value from all assignments
+ */
+int max_upper_bound(int matrix[MATRIX_HEIGHT][MATRIX_WIDTH], Assignment *assignment) {
+    int maxUpperBound = 0;
+
+    for (int i = 0; i < MATRIX_HEIGHT; i++) {
+        maxUpperBound += matrix[assignment[i].person][assignment[i].job];
+    }
+
+    // printf("In max_upper_bound: ");
+    // for (int i = 0; i < 12; i++) {
+    //     printf("{%d: %d}, ", assignment[i].person, assignment[i].job);
+    // }
+    // printf("MAX UPPER BOUND: %d", maxUpperBound);
+    // printf("\n");
+
+    return maxUpperBound;
 }
 
 /**
